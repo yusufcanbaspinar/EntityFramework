@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="AccountingSystemModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="AccountingSystemModelContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="InvoiceHeaders" EntityType="AccountingSystemModel.InvoiceHeader" />
+    <EntitySet Name="InvoiceDetails" EntityType="AccountingSystemModel.InvoiceDetail" />
+    <AssociationSet Name="InvoiceHeaderInvoiceDetail" Association="AccountingSystemModel.InvoiceHeaderInvoiceDetail">
+      <End Role="InvoiceHeader" EntitySet="InvoiceHeaders" />
+      <End Role="InvoiceDetail" EntitySet="InvoiceDetails" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="InvoiceHeader">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Total" Type="Decimal" Nullable="false" />
+    <NavigationProperty Name="InvoiceDetail" Relationship="AccountingSystemModel.InvoiceHeaderInvoiceDetail" FromRole="InvoiceHeader" ToRole="InvoiceDetail" />
+  </EntityType>
+  <EntityType Name="InvoiceDetail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ItemDescription" Type="String" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Nullable="false" />
+    <NavigationProperty Name="InvoiceHeader" Relationship="AccountingSystemModel.InvoiceHeaderInvoiceDetail" FromRole="InvoiceDetail" ToRole="InvoiceHeader" />
+    <Property Name="InvoiceHeaderId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <Association Name="InvoiceHeaderInvoiceDetail">
+    <End Type="AccountingSystemModel.InvoiceHeader" Role="InvoiceHeader" Multiplicity="1" />
+    <End Type="AccountingSystemModel.InvoiceDetail" Role="InvoiceDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="InvoiceHeader">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="InvoiceDetail">
+        <PropertyRef Name="InvoiceHeaderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
